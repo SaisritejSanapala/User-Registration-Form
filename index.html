@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration Form</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        .form-container {
+            border: 2px solid;
+            padding: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        select {
+            margin-bottom: 20px;
+        }
+
+        .error {
+            color: red;
+            height: 1em;
+           
+         
+        }
+
+        .success {
+            color: green;
+            height: 1em;
+    
+        }
+
+        .submit-button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .submit-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="form-container">
+        <form>
+
+            <label for="username">Username:</label>
+            <input type="text" id="username" />
+
+            <div>
+                <p class="username-error "></p>
+            </div>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" />
+
+            <div>
+                <p class="email-error"></p>
+            </div>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" />
+
+
+            <div>
+                <p class="password-error"></p>
+            </div>
+
+
+            <label for="password2">Confirm Password:</label>
+            <input type="password" id="password2" />
+
+
+            <div>
+                <p class="confirm-password-error"></p>
+            </div>
+
+
+
+
+            <label for="Dob">Dob:</label>
+            <input type="date" id="Dob" />
+
+            <div>
+                <p class="dob-error"></p>
+            </div>
+
+
+            <div>
+                <label>Gender:</label>
+                <input type="radio" id="male" name="gender" value="Male">
+                <label for="male">Male</label>
+                <input type="radio" id="female" name="gender" value="Female">
+                <label for="female">Female</label>
+                <input type="radio" id="other" name="gender" value="Other">
+                <label for="other">Other</label>
+
+            </div>
+
+            <div>
+                <p class="gender-error"></p>
+            </div>
+
+
+            <label for="country">Country:</label>
+            <select id="country" name="country">
+                <option value="" disabled selected>Select Country</option>
+                <option value="INDIA">India</option>
+                <option value="USA">USA</option>
+                <option value="UK">UK</option>
+            </select>
+
+            <div>
+                <p class="country-error"></p>
+            </div>
+
+            <label>
+                <input type="checkbox" id="terms" name="terms">
+                I accept the Terms and Conditions
+            </label>
+
+            <div>
+                <p class="terms-error"></p>
+            </div>
+
+
+            <input type="submit" class="submit-button" value="Submit">
+
+        </form>
+    </div>
+
+
+    <script>
+        let userName = document.querySelector('#username');
+        let email = document.querySelector('#email');
+        let password = document.querySelector('#password');
+        let confirmPassword = document.querySelector('#password2');
+        let dob = document.querySelector('#Dob');
+        let genderRadios = document.querySelectorAll('input[name="gender"]');
+        let countrySelect = document.querySelector('#country');
+        let termsCheckbox = document.querySelector('#terms');
+        let submitButton = document.querySelector('input[type="submit"]');
+
+        let usernameError = document.querySelector('.username-error');
+        let emailError = document.querySelector('.email-error');
+        let passwordError = document.querySelector('.password-error');
+        let confirmPasswordError = document.querySelector('.confirm-password-error');
+        let dobError = document.querySelector('.dob-error');
+        let genderError = document.querySelector('.gender-error');
+        let countryError = document.querySelector('.country-error');
+        let termsError = document.querySelector('.terms-error');
+
+        dob.addEventListener('blur', function () {
+            const userDob = new Date(dob.value);
+            const today = new Date();
+            const age = today.getFullYear() - userDob.getFullYear();
+
+            if (age < 18) {
+                dobError.classList.remove('success');
+                dobError.classList.add('error');
+                dobError.textContent = "User must be at least 18 years old";
+            } else {
+                dobError.classList.add('success');
+                dobError.textContent = "Success";
+            }
+        });
+
+        confirmPassword.addEventListener('blur', function () {
+            if (password.value !== confirmPassword.value) {
+                confirmPasswordError.classList.remove('success');
+                confirmPasswordError.classList.add('error');
+                confirmPasswordError.textContent = "Passwords should be the same";
+            } else {
+                confirmPasswordError.classList.add('success');
+                confirmPasswordError.classList.remove('error');
+                confirmPasswordError.textContent = "Passwords matched";
+            }
+        });
+
+        password.addEventListener('blur', function () {
+            const passwordValue = password.value;
+            const hasUppercase = /[A-Z]/.test(passwordValue);
+            const hasLowercase = /[a-z]/.test(passwordValue);
+            const hasNumber = /\d/.test(passwordValue);
+            const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(passwordValue);
+
+            if (passwordValue.length < 8 || !hasUppercase || !hasLowercase || !hasNumber || !hasSpecialChar) {
+                passwordError.classList.remove('success');
+                passwordError.classList.add('error');
+                passwordError.textContent = "Password must be at least 8 characters long and include uppercase, lowercase, numbers, and special characters";
+            } else {
+                passwordError.classList.add('success');
+                passwordError.textContent = "Success";
+            }
+        });
+
+        email.addEventListener('blur', function () {
+            if (!(email.value.includes("@") && email.value.includes(".com"))) {
+                emailError.classList.remove('success');
+                emailError.classList.add('error');
+                emailError.textContent = "Should include @ and .com";
+            } else {
+                emailError.classList.remove('error');
+                emailError.classList.add('success');
+                emailError.textContent = "Success";
+            }
+        });
+
+        userName.addEventListener('blur', function () {
+            if (userName.value.length < 5 || userName.value.length > 15) {
+                usernameError.classList.remove('success');
+                usernameError.classList.add('error');
+                usernameError.textContent = "Username should be between 5 to 15 characters in length";
+            } else if (!/^[a-zA-Z0-9]+$/.test(userName.value)) {
+                usernameError.classList.remove('success');
+                usernameError.classList.add('error');
+                usernameError.textContent = "Username should be alphanumeric and shouldn't contain special characters";
+            } else {
+                usernameError.classList.add('success');
+                usernameError.textContent = "Success";
+            }
+        });
+
+        // Event listener for gender
+        genderRadios.forEach(function (genderRadio) {
+            genderRadio.addEventListener('change', function () {
+                if (document.querySelector('input[name="gender"]:checked')) {
+                    genderError.classList.add('success');
+                    genderError.textContent = "Success";
+                } else {
+                    genderError.classList.remove('success');
+                    genderError.classList.add('error');
+                    genderError.textContent = "Please select a gender";
+                }
+            });
+        });
+
+        // Event listener for country
+        countrySelect.addEventListener('change', function () {
+            if (countrySelect.value) {
+                countryError.classList.add('success');
+                countryError.textContent = "Success";
+            } else {
+                countryError.classList.remove('success');
+                countryError.classList.add('error');
+                countryError.textContent = "Please select a country";
+            }
+        });
+
+        // Event listener for terms and conditions checkbox
+        termsCheckbox.addEventListener('change', function () {
+            if (termsCheckbox.checked) {
+                termsError.classList.add('success');
+                termsError.textContent = "Success";
+            } else {
+                termsError.classList.remove('success');
+                termsError.classList.add('error');
+                termsError.textContent = "Please accept the terms and conditions";
+            }
+        });
+
+        // Event listener for submit button
+        submitButton.addEventListener('click', function (event) {
+            // Add additional validation or processing if needed before submitting the form
+            // For example, prevent the form submission if there are errors
+            if (!validateForm()) {
+                event.preventDefault();
+                alert("Please fill in all required fields correctly.");
+            } else {
+                // If the form is valid, display a success message with user data
+                displaySuccessMessage();
+            }
+        });
+
+        // Function to display success message with user data
+        function displaySuccessMessage() {
+            // Get user data
+            const userData = {
+                Username: userName.value,
+                Email: email.value,
+                Password: password.value,
+                DateOfBirth: dob.value,
+                Gender: document.querySelector('input[name="gender"]:checked').value,
+                Country: countrySelect.value,
+                TermsAccepted: termsCheckbox.checked ? "Yes" : "No"
+            };
+
+            // Create a message
+            const message = Object.entries(userData).map(([key, value]) => `${key}: ${value}`).join('\n');
+
+            // Display the message (you can customize this part, e.g., use a modal)
+            alert("Form submitted!\n\n" + message);
+        }
+
+
+        // Function to validate the entire form
+        function validateForm() {
+            // Add any additional validation logic here
+            // Return true if the form is valid, false otherwise
+            return (
+                dobError.classList.contains('success') &&
+                confirmPasswordError.classList.contains('success') &&
+                passwordError.classList.contains('success') &&
+                emailError.classList.contains('success') &&
+                usernameError.classList.contains('success') &&
+                genderError.classList.contains('success') &&
+                countryError.classList.contains('success') &&
+                termsError.classList.contains('success')
+            );
+        }
+    </script>
+
+
+</body>
+
+</html>
